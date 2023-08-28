@@ -1,0 +1,39 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LeelaGame
+    network: mumbai
+    source:
+      address: "0x99D9b7dEEB55266d8405d45FB62c1151d94de34A"
+      abi: LeelaGame
+      startBlock: 39460777
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CommentAction
+        - DiceRolled
+        - PlayerCreated
+        - PlayerUpdated
+        - ReportAction
+        - RollDiceError
+      abis:
+        - name: LeelaGame
+          file: ./abis/LeelaGame.json
+      eventHandlers:
+        - event: CommentAction(indexed uint256,indexed uint256,indexed address,string,uint256,uint8)
+          handler: handleCommentAction
+        - event: DiceRolled(indexed address,indexed uint8,indexed uint256)
+          handler: handleDiceRolled
+        - event: PlayerCreated(indexed address,string,string,string)
+          handler: handlePlayerCreated
+        - event: PlayerUpdated(indexed address,string,string,string)
+          handler: handlePlayerUpdated
+        - event: ReportAction(indexed uint256,indexed address,string,uint256,uint256,uint8)
+          handler: handleReportAction
+        - event: RollDiceError(string)
+          handler: handleRollDiceError
+      file: ./src/leela-game.ts
